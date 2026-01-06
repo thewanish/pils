@@ -1,0 +1,65 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Users collection
+    match /users/{userId} {
+      // Anyone can read user profiles (for leaderboard, etc.)
+      allow read: if true;
+      
+      // Users can create their own profile
+      allow create: if request.auth != null
+                    && request.auth.uid == userId;
+      
+      // Users can update their own profile (including points)
+      // On free plan, clients manage points via transactions
+      allow update: if request.auth != null
+                    && request.auth.uid == userId;
+      
+      // Users can also update OTHER users' points ONLY (for vote rewards)
+      // This allows updating comment authors' points when voting
+      allow update: if request.auth != null
+                    && request.resource.data.diff(resource.data).changedKeys().hasOnly(['points']);
+    }
+    
+    // Comments collection
+    match /comments/{commentId} {
+      // Anyone can read comments
+      allow read: if true;
+      
+      // Users can create comments with their own userId and score=0
+      allow create: if request.auth != null
+                    && request.resource.data.userId == request.auth.uid
+                    && request.resource.data.score == 0;
+      
+      // Comment author can update their comment normally.
+      // Anyone can update ONLY the 'score' field (used for voting on free plan).
+      allow update: if request.auth != null && (
+                      request.auth.uid == resource.data.userId ||
+                      request.resource.data.diff(resource.data).changedKeys().hasOnly(['score'])
+                    );
+      
+      // Votes subcollection
+      match /votes/{voteId} {
+        // Anyone can read votes (to show if they voted)
+        allow read: if true;
+        
+        // Users can only create/update their own vote (voteId must match their uid)
+        // and value must be 1 or -1
+        allow create, update: if request.auth != null
+                              && request.auth.uid == voteId
+                              && (request.resource.data.value == 1 
+                                  || request.resource.data.value == -1);
+        
+        // Users can only delete their own vote
+        allow delete: if request.auth != null 
+                      && request.auth.uid == voteId;
+      }
+    }
+    
+    // Pub images collection (public read-only)
+    match /pub_images/{document=**} {
+      allow read: if true;
+    }
+  }
+}
