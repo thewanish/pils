@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "pilstilbud",
+    "name": "Pilstilbud",
     "slug": "pilstilbud",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -15,7 +15,12 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.shil.pilstilbud",
+      "buildNumber": "3",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -27,10 +32,18 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
+    "react-native-google-mobile-ads": {
+      "android_app_id": "ca-app-pub-6973213968285034~9292412879",
+      "ios_app_id": "ca-app-pub-6973213968285034~9292412879"
+    },
     "extra": {
       "eas": {
-        "projectId": "5973ed4f-c5e2-4754-ad0c-df6f53d9a98d"
+        "projectId": "e85bbee0-4b85-4e73-af7d-62777b4f52ed"
       }
     }
+  },
+  "react-native-google-mobile-ads": {
+    "android_app_id": "ca-app-pub-6973213968285034~9292412879",
+    "ios_app_id": "ca-app-pub-6973213968285034~9292412879"
   }
 }

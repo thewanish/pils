@@ -1,4 +1,4 @@
-# Flash News ⚡️
+# Pilstilbud 🍺
 [![GitHub stars](https://img.shields.io/github/stars/sami3898/pilstilbud.svg?style=social)](https://github.com/sami3898/pilstilbud)  [!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/samcode38)
 
 ## Description

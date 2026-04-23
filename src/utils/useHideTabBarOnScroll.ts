@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useContext } from "react";
 import type { NativeScrollEvent, NativeSyntheticEvent } from "react-native";
-import { TabBarVisibilityContext } from "../Navigation/MainTabs";
+import { TabBarVisibilityContext } from "../Navigation/TabBarVisibilityContext";
 
 /**
  * Hide the bottom tab bar when the user scrolls down, show it again on scroll up.

@@ -6,7 +6,7 @@ const axios = require('axios');
 
 // Configure your Firebase project
 const PROJECT_ID = 'pilsen-4134f';
-const STORAGE_BUCKET = `${PROJECT_ID}.appspot.com`;
+const STORAGE_BUCKET = 'pilsen-4134f.firebasestorage.app';
 
 // Initialize Firebase Admin
 const serviceAccount = require('../serviceAccountKey.json');

@@ -7,7 +7,7 @@ import { db } from "../firebase/firebase";
 /* ================= CONFIG ================= */
 
 const API_URL =
-  "https://api.apify.com/v2/datasets/Qt6MIZpWAOkLE5W1S/items?format=json&clean=true";
+  "https://api.apify.com/v2/datasets/qkgx2kUaxNMLgSVNp/items?format=json&clean=true";
 
 /* ================= API ================= */
 

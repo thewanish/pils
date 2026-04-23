@@ -27,7 +27,7 @@ export const requestNotificationPermission = async () => {
 const scehduleNotification = async (news: News[],hour:number, minutes: number) => {
 
     let notificationObject: Notification.NotificationContentInput = {
-        title: 'Flash News ⚡️',
+        title: 'Pilstilbud 🍺',
         sound: true,
         vibrate: [1,1,2,2,1,1]
         

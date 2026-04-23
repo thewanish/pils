@@ -1,17 +1,35 @@
 // src/Screens/LoginScreen.tsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ActivityIndicator } from "react-native";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import type { FirebaseError } from "firebase/app";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { auth } from "../firebase/firebase";
+import { onAuthStateChanged } from "firebase/auth";
 // use RN.Alert and RN.ActivityIndicator via RN namespace
 import { useNavigation } from "@react-navigation/native";
 
 export default function LoginScreen() {
   const navigation = useNavigation<any>();
+  const [authChecked, setAuthChecked] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+
+  // Track auth state to avoid flashing login screen if already logged in
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        navigation.reset({
+          index: 0,
+          routes: [{ name: "MainTabs" }],
+        });
+      } else {
+        setAuthChecked(true);
+      }
+    });
+    return unsubscribe;
+  }, [navigation]);
 
   const login = async () => {
     if (loading) return;
@@ -21,31 +39,10 @@ export default function LoginScreen() {
     }
     setLoading(true);
     try {
-      console.log("[LOGIN] auth instance:", auth?.app?.name ?? auth);
-      console.log("[LOGIN] attempting:", email.trim());
-      const cred = await signInWithEmailAndPassword(auth, email.trim(), password);
-      console.log("[LOGIN] signInWithEmailAndPassword resolved, cred:", cred);
-      console.log("[LOGIN] cred.user:", cred.user);
-      console.log("[LOGIN] currentUser after signin:", auth.currentUser);
-      if (!auth.currentUser) {
-        // This is unexpected but can happen if persistence is memory-only and not applied
-        Alert.alert(
-          "Login warning",
-          "Signed in but auth state not available (persistence issue). Check AsyncStorage setup."
-        );
-      }
-      try {
-        const token = await auth.currentUser?.getIdToken();
-        console.log("[LOGIN] idToken length:", token ? token.length : "<no token>");
-      } catch (tErr) {
-        console.warn("[LOGIN] token fetch failed", tErr);
-      }
-      // navigate to main app; using navigation from hook
-      navigation.navigate("MainTabs");
+      await signInWithEmailAndPassword(auth, email.trim(), password);
+      // Success: onAuthStateChanged will handle navigation
     } catch (err: any) {
       const e = err as FirebaseError | any;
-      console.error("LOGIN ERROR:", e?.code ?? e, e?.message ?? e);
-      // show code in alert to help debugging
       const code = e?.code ?? "unknown";
       const msg = e?.message ?? String(e);
       if (code === "auth/user-not-found" || code === "auth/wrong-password") {
@@ -59,6 +56,14 @@ export default function LoginScreen() {
       setLoading(false);
     }
   };
+
+  if (!authChecked) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -88,7 +93,7 @@ export default function LoginScreen() {
         )}
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
+      <TouchableOpacity onPress={() => navigation.navigate("Signup")}> 
         <Text style={styles.link}>Opprett konto</Text>
       </TouchableOpacity>
 
@@ -113,23 +118,36 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   button: {
-    backgroundColor: "#d11a2a",
+    backgroundColor: "#D32F2F", // red
     padding: 16,
     borderRadius: 8,
-    marginTop: 8,
+    alignItems: "center",
+    marginTop: 12,
+    marginBottom: 12,
   },
-  buttonText: { color: "#fff", fontWeight: "700", textAlign: "center" },
-  link: { marginTop: 16, textAlign: "center", color: "#d11a2a" },
+  buttonText: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+  link: {
+    color: "#D32F2F", // red
+    marginTop: 8,
+    textAlign: "center",
+    fontWeight: "bold",
+  },
   skipButton: {
     marginTop: 24,
-    padding: 16,
+    alignItems: "center",
     borderWidth: 1,
-    borderColor: "#d11a2a",
+    borderColor: "#D32F2F", // red
     borderRadius: 8,
+    paddingVertical: 10,
+    paddingHorizontal: 18,
   },
-  skipText: { 
-    color: "#d11a2a", 
-    fontWeight: "600", 
-    textAlign: "center" 
+  skipText: {
+    color: "#D32F2F", // red
+    fontSize: 14,
+    fontWeight: "bold",
   },
 });

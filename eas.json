@@ -1,6 +1,8 @@
 {
   "cli": {
-    "version": ">= 3.13.2"
+    "version": ">= 3.13.2",
+    "promptToConfigurePushNotifications": false,
+    "appVersionSource": "remote"
   },
   "build": {
     "preview": {
@@ -16,7 +18,11 @@
     "preview3": {
       "developmentClient": true
     },
-    "production": {}
+    "production": {
+      "ios": {
+        "image": "latest"
+      }
+    }
   },
   "submit": {
     "production": {}

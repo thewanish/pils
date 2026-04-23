@@ -11,16 +11,9 @@ import ExploreScreen from "../Screens/ExploreScreen";
 import BookmarkScreen from "../Screens/BookmarkScreen";
 import LeaderboardScreen from "../Screens/LeaderboardScreen";
 import SettingsScreen from "../Screens/SettingsScreen";
+import { TabBarVisibilityContext } from "./TabBarVisibilityContext";
 
 const Tab = createBottomTabNavigator();
-
-export const TabBarVisibilityContext = React.createContext<{
-  hideTabBar: () => void;
-  showTabBar: () => void;
-}>({
-  hideTabBar: () => {},
-  showTabBar: () => {},
-});
 
 function AnimatedTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
   const { translateY } = React.useContext(TabBarAnimationContext);

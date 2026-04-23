@@ -376,7 +376,7 @@ export default function BeerScreen() {
 
       <View style={styles.inputRow}>
         <TextInput
-          placeholder="Add a suggestion..."
+          placeholder="Legg til et forslag..."
           value={text}
           onChangeText={setText}
           style={styles.input}
@@ -437,16 +437,19 @@ const styles = StyleSheet.create({
 
   inputRow: {
     flexDirection: "row",
-    padding: 10,
+    padding: 14, // slightly bigger
     borderTopWidth: 1,
     borderColor: "#ddd",
+    alignItems: "center",
   },
   input: {
     flex: 1,
     borderWidth: 1,
     borderColor: "#ddd",
-    borderRadius: 20,
-    paddingHorizontal: 14,
+    borderRadius: 24, // slightly bigger
+    paddingHorizontal: 18, // slightly bigger
+    paddingVertical: 10, // add vertical padding
+    fontSize: 16, // slightly bigger text
   },
   post: {
     backgroundColor: "#c33835",
